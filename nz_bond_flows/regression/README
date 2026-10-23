@@ -1,0 +1,15 @@
+The following files need to be presentmin this directory:
+
+Controls - Regression Control Panel.csv
+FX.csv
+nz_daily_flows.csv
+US_Share_of_New_Zealand_Debt.xlsx - Regression Series.csv
+
+They can be found in the regression folder in Google Drive.
+
+Run the script with:
+```bash
+pip install numpy pandas scipy statsmodels matplotlib
+
+python nz_bond_flows/code/run_regressions.py
+```
