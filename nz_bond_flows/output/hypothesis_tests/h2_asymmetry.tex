@@ -1,0 +1,37 @@
+\documentclass[10pt]{article}
+\usepackage[landscape,margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{document}
+\begin{center}\large\textbf{H2: issuance-repayment asymmetry}\end{center}
+\noindent\textbf{Level change in e (USD per NZD)}\\[0.3em]
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}
+\hline
+Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+event-day equal/opposite effect & $-1.723\!\times\!10^{-8}$ &  & $\phantom{-}2.859\!\times\!10^{-6}$ & $-0.006$ $z$ & $\neq 0$ & $0.995$\textsuperscript{} & $-5.620\!\times\!10^{-6}$ & $\phantom{-}5.586\!\times\!10^{-6}$ \\
+full-window equal/opposite effect & $\phantom{-}1.838\!\times\!10^{-5}$ &  & $\phantom{-}7.982\!\times\!10^{-6}$ & $\phantom{-}2.303$ $z$ & $\neq 0$ & $0.021$\textsuperscript{**} & $\phantom{-}2.735\!\times\!10^{-6}$ & $\phantom{-}3.402\!\times\!10^{-5}$ \\
+\hline
+\end{tabular}
+\vspace{1em}
+
+\noindent\textbf{100 x log change in e (USD per NZD)}\\[0.3em]
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}
+\hline
+Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+event-day equal/opposite effect & $\phantom{-}2.403\!\times\!10^{-5}$ &  & $\phantom{-}4.533\!\times\!10^{-4}$ & $\phantom{-}0.053$ $z$ & $\neq 0$ & $0.958$\textsuperscript{} & $-8.644\!\times\!10^{-4}$ & $\phantom{-}9.125\!\times\!10^{-4}$ \\
+full-window equal/opposite effect & $\phantom{-}2.701\!\times\!10^{-3}$ &  & $\phantom{-}1.189\!\times\!10^{-3}$ & $\phantom{-}2.272$ $z$ & $\neq 0$ & $0.023$\textsuperscript{**} & $\phantom{-}3.709\!\times\!10^{-4}$ & $\phantom{-}5.030\!\times\!10^{-3}$ \\
+\hline
+\end{tabular}
+\vspace{1em}
+
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+{\footnotesize\\ Joint tests use a robust Wald $\chi^2$; contrasts use a normal $z$ test (one-sided where $H_a$ is $>0$ or $<0$). Estimates are sums of coefficients; confidence intervals are two-sided 95\%.}
+\end{document}

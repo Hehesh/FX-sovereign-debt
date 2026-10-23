@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """NZD/USD sovereign cash-flow regressions; run from basedir/code/.
 
-Dependencies: pandas, numpy, scipy, statsmodels, matplotlib, jinja2 (LaTeX export).
+Dependencies: pandas, numpy, scipy, statsmodels, matplotlib, and a system `pdflatex`.
 Example: python run_regressions.py
 Optional: --weekend-policy drop --missing-flow zero --hac-lags 10
 """
@@ -10,6 +10,8 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
+import subprocess
 from pathlib import Path
 
 import matplotlib
@@ -19,6 +21,9 @@ import numpy as np
 import pandas as pd
 from scipy.stats import norm
 import statsmodels.api as sm
+from statsmodels.stats.diagnostic import (acorr_breusch_godfrey, acorr_ljungbox,
+                                           het_breuschpagan, het_white)
+from statsmodels.stats.stattools import durbin_watson, jarque_bera
 
 FLOW_COLS = [f'{prefix}_{component}' for prefix in ('nom', 'iib')
              for component in ('issuance', 'principal', 'coupon', 'buyback')]
@@ -57,12 +62,110 @@ def read_csv(path: Path, required: list[str], *,
     return df.sort_values('date').reset_index(drop=True)
 
 
-def save_table(df: pd.DataFrame, stem: Path, index: bool = False) -> None:
+def save_csv(df: pd.DataFrame, stem: Path, index: bool = False) -> None:
+    """Save an internal data product without creating presentation clutter."""
     df.to_csv(stem.with_suffix('.csv'), index=index, float_format='%.9g')
-    df.to_html(stem.with_suffix('.html'), index=index, border=0, classes='regression-table',
-               float_format=lambda x: f'{x:,.4f}', na_rep='—')
-    with open(stem.with_suffix('.tex'), 'w', encoding='utf-8') as f:
-        f.write(df.to_latex(index=index, escape=True, na_rep='—', float_format='%.4f'))
+
+
+def latex_escape(value: object) -> str:
+    text = str(value).replace('–', '--').replace('—', '---').replace('×', r'$\times$')
+    replacements = {
+        '&': r'\&', '%': r'\%', '$': r'\$', '#': r'\#', '_': r'\_',
+        '{': r'\{', '}': r'\}', '~': r'\textasciitilde{}', '^': r'\textasciicircum{}',
+    }
+    return ''.join(replacements.get(char, char) for char in text)
+
+
+def compile_latex(body: list[str], path: Path, title: str, *, landscape: bool = False) -> None:
+    """Wrap body lines in a standalone article and compile it with pdflatex."""
+    options = ('landscape,' if landscape else '') + 'margin=0.7in'
+    lines = [
+        r'\documentclass[10pt]{article}',
+        rf'\usepackage[{options}]{{geometry}}',
+        r'\usepackage[T1]{fontenc}',
+        r'\usepackage{lmodern}',
+        r'\usepackage{amsmath}',
+        r'\usepackage{array}',
+        r'\usepackage{longtable}',
+        r'\usepackage{booktabs}',
+        r'\setlength{\parindent}{0pt}',
+        r'\renewcommand{\arraystretch}{1.12}',
+        r'\begin{document}',
+        r'\begin{center}\large\textbf{' + latex_escape(title) + r'}\end{center}',
+        *body,
+        r'\end{document}', '',
+    ]
+    path.write_text('\n'.join(lines), encoding='utf-8')
+    try:
+        subprocess.run([
+            'pdflatex', '-interaction=nonstopmode', '-halt-on-error',
+            '-output-directory', str(path.parent), str(path),
+        ], check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    except FileNotFoundError as exc:
+        raise RuntimeError('pdflatex is required to render the report PDFs') from exc
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(f'Could not render {path.name}:\n{exc.stdout[-3000:]}') from exc
+    for suffix in ('.aux', '.log', '.fls', '.fdb_latexmk', '.synctex.gz'):
+        path.with_suffix(suffix).unlink(missing_ok=True)
+
+
+def choose_format(values) -> tuple[str, int]:
+    """One notation for a block of numbers so decimal points line up (fixed vs. scientific)."""
+    mags = [abs(float(v)) for v in values if pd.notna(v) and np.isfinite(v) and v != 0]
+    if not mags:
+        return 'fixed', 3
+    if min(mags) < 1e-3 or max(mags) >= 1e5:
+        return 'sci', 3
+    return 'fixed', int(np.clip(3 - np.floor(np.log10(min(mags))), 2, 6))
+
+
+def tex_num(x: object, fmt: tuple[str, int]) -> str:
+    """Math-mode number with a phantom minus so signed and unsigned values stay aligned."""
+    if x is None or pd.isna(x) or not np.isfinite(x):
+        return ''
+    kind, dec = fmt
+    pad = '' if x < 0 else r'\phantom{-}'
+    if x == 0:
+        return rf'${pad}0$'
+    if kind == 'sci':
+        mantissa, exp = f'{x:.{dec}e}'.split('e')
+        return rf'${mantissa if x < 0 else pad + mantissa}\!\times\!10^{{{int(exp)}}}$'
+    return rf'${pad}{abs(x):.{dec}f}$' if x >= 0 else rf'${x:.{dec}f}$'
+
+
+def tex_p(p: object) -> str:
+    if p is None or pd.isna(p):
+        return ''
+    return r'$<\!0.001$' if p < .001 else rf'${p:.3f}$'
+
+
+def tex_stars(p: object) -> str:
+    if p is None or pd.isna(p):
+        return ''
+    return '***' if p < .01 else ('**' if p < .05 else ('*' if p < .1 else ''))
+
+
+STARS_NOTE = r'{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}'
+
+
+def clear_report_outputs(out: Path) -> None:
+    """Remove prior presentation outputs so each run has exactly five reports."""
+    for folder in (out / 'tables', out / 'hypothesis_tests'):
+        folder.mkdir(parents=True, exist_ok=True)
+        for path in folder.iterdir():
+            if path.is_file() and (path.suffix in {'.csv', '.html', '.tex', '.pdf', '.png',
+                                                   '.aux', '.log', '.fls', '.fdb_latexmk'}
+                                   or path.name.endswith('.synctex.gz')
+                                   or path.name == 'table_notes.txt'):
+                path.unlink()
+
+
+def clear_latex_auxiliary(out: Path) -> None:
+    for folder in (out / 'tables', out / 'hypothesis_tests'):
+        for path in folder.iterdir():
+            if path.is_file() and (path.suffix in {'.aux', '.log', '.fls', '.fdb_latexmk'}
+                                   or path.name.endswith('.synctex.gz')):
+                path.unlink()
 
 
 def move_flows_to_fx_dates(flows: pd.DataFrame, fx_dates: pd.DatetimeIndex,
@@ -182,6 +285,27 @@ def fit(raw: pd.DataFrame, name: str, outcome: str, hac_lags: int):
     return result, frame, cond
 
 
+def regression_diagnostics(result, hac_lags: int) -> dict[str, object]:
+    """Standard residual diagnostics reported alongside each regression."""
+    resid, exog = result.resid, result.model.exog
+    bp_lm, bp_lm_p, bp_f, bp_f_p = het_breuschpagan(resid, exog)
+    try:
+        white_lm, white_lm_p, white_f, white_f_p = het_white(resid, exog)
+    except ValueError:
+        white_lm = white_lm_p = white_f = white_f_p = np.nan
+    bg_lm, bg_lm_p, bg_f, bg_f_p = acorr_breusch_godfrey(result, nlags=hac_lags)
+    lb = acorr_ljungbox(resid, lags=[hac_lags], return_df=True).iloc[0]
+    jb, jb_p, skew, kurt = jarque_bera(resid)
+    return {
+        'Breusch–Pagan LM (heteroskedasticity)': (bp_lm, bp_lm_p),
+        'White LM (heteroskedasticity)': (white_lm, white_lm_p),
+        f'Breusch–Godfrey LM ({hac_lags} lags; autocorrelation)': (bg_lm, bg_lm_p),
+        f'Ljung–Box Q ({hac_lags} lags; autocorrelation)': (float(lb['lb_stat']), float(lb['lb_pvalue'])),
+        'Jarque–Bera (normality)': (jb, jb_p),
+        'Durbin–Watson': (durbin_watson(resid), np.nan),
+    }
+
+
 def contrast(result, weights: dict[str, float], name: str, alternative: str = 'two-sided') -> dict:
     """Linear HAC robust Wald / normal tests of L'beta=0.
     Two-sided: Wald chi-square(1); one-sided: signed normal z-test.
@@ -245,35 +369,156 @@ def fmt_coef(b: float, p: float) -> str:
     return f'{b:.4g}{stars}'
 
 
+OUTCOME_LABELS = {
+    'Level change': 'Level change in e (USD per NZD)',
+    'Log return (%)': '100 x log change in e (USD per NZD)',
+}
+
+
+def stata_block(result, model: dict, outcome: str, model_name: str) -> list[str]:
+    """One Stata-like regression display: header statistics, coefficient table, diagnostics."""
+    k = len(result.params) - 1
+    restriction = np.zeros((k, k + 1))
+    restriction[:, 1:] = np.eye(k)
+    wald = result.wald_test(restriction, scalar=True)
+    root_mse = float(np.sqrt(result.ssr / result.df_resid))
+    left = [
+        ('Specification', model_name),
+        ('Dependent variable', OUTCOME_LABELS[outcome]),
+        ('Sample', f"{model['first_date']} to {model['last_date']}"),
+        ('Std. errors', f"HAC (Newey--West), {model['hac_lags']} lags"),
+        ('Condition no.', f"{model['design_condition_number']:.4g}"),
+        ('AIC / BIC', f"{result.aic:.1f} / {result.bic:.1f}"),
+    ]
+    right = [
+        ('Number of obs', f'{int(result.nobs):,}'),
+        (f'Wald chi2({k})', f'{float(wald.statistic):.2f}'),
+        ('Prob $>$ chi2', f'{float(wald.pvalue):.4f}'),
+        ('R-squared', f'{result.rsquared:.4f}'),
+        ('Adj R-squared', f'{result.rsquared_adj:.4f}'),
+        ('Root MSE', tex_num(root_mse, choose_format([root_mse])).strip()),
+    ]
+    out = [r'\noindent\begin{tabular}{@{}l l @{\hspace{3em}} l r@{}}']
+    for (l1, l2), (r1, r2) in zip(left, right):
+        out.append(f'{l1} & {l2} & {r1} & {r2} \\\\')
+    out += [r'\end{tabular}', r'\vspace{0.8em}', '']
+
+    ci = result.conf_int(alpha=.05)
+    fmt = choose_format(np.concatenate([result.params, result.bse, ci.to_numpy().ravel()]))
+    # Stata convention: slope terms first in model order, constant last; blank rule between groups.
+    order = [v for v in result.params.index if v != 'const'] + ['const']
+    groups, previous = [], None
+    for variable in order:
+        group = re.sub(r'_k[+-]\d+$', '', variable) if '_k' in variable else 'ctrl'
+        if variable == 'const':
+            group = 'const'
+        groups.append((variable, group != previous and previous is not None))
+        previous = group
+    out += [r'\noindent\begin{tabular}{@{}l|r@{}l rrr rr@{}}', r'\hline',
+            r' & \multicolumn{2}{c}{Coef.} & HAC Std. Err. & $z$ & $P>|z|$ '
+            r'& \multicolumn{2}{c}{[95\% Conf. Interval]} \\', r'\hline']
+    for variable, new_group in groups:
+        if new_group:
+            out.append(r'\addlinespace[0.3em]')
+        out.append(' & '.join([
+            latex_escape(pretty_variable(variable)),
+            tex_num(result.params[variable], fmt),
+            rf'\textsuperscript{{{tex_stars(result.pvalues[variable])}}}',
+            tex_num(result.bse[variable], fmt),
+            tex_num(result.tvalues[variable], ('fixed', 2)),
+            tex_p(result.pvalues[variable]),
+            tex_num(ci.loc[variable, 0], fmt),
+            tex_num(ci.loc[variable, 1], fmt),
+        ]) + r' \\')
+    out += [r'\hline', r'\end{tabular}', r'\\[0.2em]', STARS_NOTE, r'\vspace{0.9em}', '']
+
+    out += [r'\noindent\textbf{Residual diagnostics}\\[0.3em]',
+            r'\begin{tabular}{@{}l|rr l@{}}', r'\hline',
+            r'Test & Statistic & $p$-value & Null hypothesis \\', r'\hline']
+    for test, (statistic, p_value) in regression_diagnostics(result, model['hac_lags']).items():
+        null = DIAGNOSTIC_NULLS.get(test.split(' (')[0].split(' ')[0], '')
+        out.append(f'{latex_escape(test)} & {tex_num(statistic, ("fixed", 3))} & '
+                   f'{tex_p(p_value)} & {null} \\\\')
+    out += [r'\hline', r'\end{tabular}']
+    return out
+
+
+DIAGNOSTIC_NULLS = {
+    'Breusch–Pagan': 'homoskedastic residuals', 'White': 'homoskedastic residuals',
+    'Breusch–Godfrey': 'no serial correlation', 'Ljung–Box': 'no serial correlation',
+    'Jarque–Bera': 'normal residuals', 'Durbin–Watson': 'DW $\\approx 2$: no first-order autocorrelation',
+}
+
+
 def export_results(results: dict, out: Path, diagnostics: list[dict]) -> None:
-    detailed = []
-    labels = list(dict.fromkeys(k for result in results.values() for k in result.params.index))
-    display = pd.DataFrame({'variable': labels})
-    for model, result in results.items():
-        b = result.params; se = result.bse; p = result.pvalues; ci = result.conf_int(alpha=.05)
-        pretty = []
-        for variable in labels:
-            if variable in b:
-                pretty.append(f'{fmt_coef(b[variable], p[variable])}  ({se[variable]:.3g})')
-            else:
-                pretty.append('')
-        display[model] = pretty
-        for variable in b.index:
-            detailed.append({'model': model, 'variable': variable, 'coefficient': b[variable],
-                             'hac_se': se[variable], 'z': result.tvalues[variable],
-                             'p_value': p[variable], 'ci95_low': ci.loc[variable, 0],
-                             'ci95_high': ci.loc[variable, 1]})
-    save_table(pd.DataFrame(detailed), out / 'tables' / 'coefficient_details')
-    summary = pd.DataFrame(diagnostics)
-    save_table(summary, out / 'tables' / 'model_diagnostics')
-    save_table(display, out / 'tables' / 'regression_comparison')
-    # The table includes HAC standard errors in parentheses. Stars: *** 1%, ** 5%, * 10%.
-    with open(out / 'tables' / 'table_notes.txt', 'w') as f:
-        f.write('Coefficients with HAC (Newey-West) SE in parentheses. *** p<0.01; ** p<0.05; * p<0.10.\n'
-                'Cash flow units are retained from input. Negative source issuance is converted to a positive magnitude; '
-                'net flow is issuance minus principal, coupons and buybacks.\n'
-                'Outcomes use USD per NZD; a positive change denotes NZD appreciation.\n'
-                'Lead indices k>0 are pre-event; k<0 are post-event.\n')
+    """Export one Stata-style report (one regression per page) for each specification."""
+    for model_name, stem in (('Net flows', 'regression_net_flows'),
+                             ('Disaggregated', 'regression_disaggregated')):
+        body = []
+        for i, outcome in enumerate(('Level change', 'Log return (%)')):
+            key = f'{model_name} — {outcome}'
+            model = next(row for row in diagnostics if row['model'] == key)
+            if i:
+                body.append(r'\newpage')
+            body += stata_block(results[key], model, outcome, model_name)
+        compile_latex(body, out / 'tables' / f'{stem}.tex', f'{model_name}: OLS with HAC standard errors')
+
+
+def pretty_variable(variable: str) -> str:
+    if variable == 'const':
+        return 'Constant'
+    labels = {'vix': 'VIX', 'treasury_swap_merged': 'Treasury swap', 'us_release': 'US release',
+              'us_coupon': 'US coupon', 'us_buyback': 'US buyback'}
+    if variable in labels:
+        return labels[variable]
+    match = re.fullmatch(r'us_(net_flow|issuance|principal)_k([+-]\d+)', variable)
+    if match:
+        component = {'net_flow': 'Net flow', 'issuance': 'Issuance', 'principal': 'Principal'}[match.group(1)]
+        k = int(match.group(2))
+        timing = 'pre' if k > 0 else ('post' if k < 0 else 'event')
+        return f'US {component} (k={k:+d}, {timing})'
+    return variable
+
+
+ALTERNATIVES = {'greater': r'$>0$', 'less': r'$<0$', 'two-sided': r'$\neq 0$',
+                'at least one nonzero': r'any $\neq 0$'}
+
+
+def export_hypothesis_reports(test_frames: dict[str, pd.DataFrame], out: Path) -> None:
+    names = {
+        'H1': ('H1: anticipation (pre-event appreciation)', 'h1_anticipation'),
+        'H2': ('H2: issuance-repayment asymmetry', 'h2_asymmetry'),
+        'H3': ('H3: post-event response (reversal)', 'h3_reversal'),
+    }
+    for prefix, (title, stem) in names.items():
+        body = []
+        for outcome, frame in test_frames.items():
+            selected = frame[frame['test'].str.startswith(prefix)]
+            fmt = choose_format(np.concatenate([selected[c].to_numpy(dtype=float)
+                                                for c in ('estimate', 'se', 'ci95_lower', 'ci95_upper')]))
+            body += [rf'\noindent\textbf{{{latex_escape(OUTCOME_LABELS[outcome])}}}\\[0.3em]',
+                     r'\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}', r'\hline',
+                     r'Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & '
+                     r'\multicolumn{2}{c}{[95\% Conf. Interval]} \\',
+                     r'\hline']
+            for row in selected.itertuples(index=False):
+                dist = '$z$' if row.distribution == 'standard normal z' else rf'$\chi^2({int(row.df)})$'
+                out_cells = [
+                    latex_escape(row.test.split(': ', 1)[1]),
+                    tex_num(row.estimate, fmt), '',
+                    tex_num(row.se, fmt),
+                    rf'{tex_num(row.statistic, ("fixed", 3))} {dist}',
+                    ALTERNATIVES.get(row.alternative, ''),
+                    rf'{tex_p(row.p_value)}\textsuperscript{{{tex_stars(row.p_value)}}}',
+                    tex_num(row.ci95_lower, fmt), tex_num(row.ci95_upper, fmt),
+                ]
+                body.append(' & '.join(out_cells) + r' \\')
+            body += [r'\hline', r'\end{tabular}', r'\vspace{1em}', '']
+        body += [STARS_NOTE,
+                 r'{\footnotesize\\ Joint tests use a robust Wald $\chi^2$; contrasts use a normal $z$ test '
+                 r'(one-sided where $H_a$ is $>0$ or $<0$). Estimates are sums of coefficients; '
+                 r'confidence intervals are two-sided 95\%.}']
+        compile_latex(body, out / 'hypothesis_tests' / f'{stem}.tex', title, landscape=True)
 
 
 def plot_principal(result, out: Path) -> None:
@@ -313,6 +558,7 @@ def main():
     out = base / 'output'
     for sub in ('intermediate', 'tables', 'hypothesis_tests'):
         (out / sub).mkdir(parents=True, exist_ok=True)
+    clear_report_outputs(out)
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s',
                         handlers=[logging.StreamHandler(), logging.FileHandler(out / 'run.log', mode='w')])
     logging.info('Base=%s; weekend=%s; missing-flow=%s; input FX=%s',
@@ -321,7 +567,7 @@ def main():
     cols = ['date', 'flow_observed', FX_COL, 'delta_e', 'us_share', *REQUIRED_CONTROLS,
             'issuance', 'principal', 'coupon', 'buyback', 'net_flow', 'us_net_flow']
     counts = raw[cols].isna().sum().rename('missing_count').reset_index().rename(columns={'index': 'variable'})
-    save_table(counts, out / 'intermediate' / 'missingness_summary')
+    save_csv(counts, out / 'intermediate' / 'missingness_summary')
     outcomes = [('delta_e', 'Level change'), ('log_return_pct', 'Log return (%)')]
     results, diagnostics = {}, []
     for target, tag in outcomes:
@@ -339,15 +585,13 @@ def main():
                                 'design_condition_number': cond, 'hac_lags': args.hac_lags})
             logging.info('%s: n=%d, adj R2=%.4f', key, int(fit_res.nobs), fit_res.rsquared_adj)
     export_results(results, out, diagnostics)
-    all_tests = []
+    test_frames = {}
     for target, tag in outcomes:
         key = f'Disaggregated — {tag}'
         testdf = hypothesis_tests(results[key])
-        testdf.insert(0, 'outcome', tag)
-        all_tests.append(testdf)
-        save_table(testdf, out / 'hypothesis_tests' / f'tests_{target}')
-    save_table(pd.concat(all_tests, ignore_index=True), out / 'hypothesis_tests' / 'all_hypothesis_tests')
-    plot_principal(results['Disaggregated — Level change'], out)
+        test_frames[tag] = testdf
+    export_hypothesis_reports(test_frames, out)
+    clear_latex_auxiliary(out)
     metadata = {'base_dir': str(base), 'weekend_policy': args.weekend_policy,
                 'missing_flow_policy': args.missing_flow, 'hac_lags': args.hac_lags,
                 'n_fx_days': len(raw), 'n_source_flow_dates_mapped': int(audit.used.sum()),

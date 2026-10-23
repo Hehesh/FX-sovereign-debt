@@ -1,0 +1,39 @@
+\documentclass[10pt]{article}
+\usepackage[landscape,margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{document}
+\begin{center}\large\textbf{H3: post-event response (reversal)}\end{center}
+\noindent\textbf{Level change in e (USD per NZD)}\\[0.3em]
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}
+\hline
+Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+post-event joint zero &  &  &  & $\phantom{-}13.122$ $\chi^2(5)$ & any $\neq 0$ & $0.022$\textsuperscript{**} &  &  \\
+cumulative post-event depreciation & $\phantom{-}5.103\!\times\!10^{-6}$ &  & $\phantom{-}3.265\!\times\!10^{-6}$ & $\phantom{-}1.563$ $z$ & $<0$ & $0.941$\textsuperscript{} & $-1.297\!\times\!10^{-6}$ & $\phantom{-}1.150\!\times\!10^{-5}$ \\
+complete pre/post offset & $\phantom{-}9.472\!\times\!10^{-6}$ &  & $\phantom{-}4.710\!\times\!10^{-6}$ & $\phantom{-}2.011$ $z$ & $\neq 0$ & $0.044$\textsuperscript{**} & $\phantom{-}2.408\!\times\!10^{-7}$ & $\phantom{-}1.870\!\times\!10^{-5}$ \\
+\hline
+\end{tabular}
+\vspace{1em}
+
+\noindent\textbf{100 x log change in e (USD per NZD)}\\[0.3em]
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}
+\hline
+Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+post-event joint zero &  &  &  & $\phantom{-}15.837$ $\chi^2(5)$ & any $\neq 0$ & $0.007$\textsuperscript{***} &  &  \\
+cumulative post-event depreciation & $\phantom{-}6.695\!\times\!10^{-4}$ &  & $\phantom{-}4.419\!\times\!10^{-4}$ & $\phantom{-}1.515$ $z$ & $<0$ & $0.935$\textsuperscript{} & $-1.967\!\times\!10^{-4}$ & $\phantom{-}1.536\!\times\!10^{-3}$ \\
+complete pre/post offset & $\phantom{-}1.322\!\times\!10^{-3}$ &  & $\phantom{-}6.565\!\times\!10^{-4}$ & $\phantom{-}2.013$ $z$ & $\neq 0$ & $0.044$\textsuperscript{**} & $\phantom{-}3.501\!\times\!10^{-5}$ & $\phantom{-}2.609\!\times\!10^{-3}$ \\
+\hline
+\end{tabular}
+\vspace{1em}
+
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+{\footnotesize\\ Joint tests use a robust Wald $\chi^2$; contrasts use a normal $z$ test (one-sided where $H_a$ is $>0$ or $<0$). Estimates are sums of coefficients; confidence intervals are two-sided 95\%.}
+\end{document}
