@@ -1,0 +1,114 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{document}
+\begin{center}\large\textbf{Net flows: OLS with HAC standard errors}\end{center}
+\noindent\begin{tabular}{@{}l l @{\hspace{3em}} l r@{}}
+Specification & Net flows & Number of obs & 2,671 \\
+Dependent variable & Level change in e (USD per NZD) & Wald chi2(14) & 19.01 \\
+Sample & 2014-01-09 to 2025-01-31 & Prob $>$ chi2 & 0.1645 \\
+Std. errors & HAC (Newey--West), 10 lags & R-squared & 0.0072 \\
+Condition no. & 231 & Adj R-squared & 0.0020 \\
+AIC / BIC & -21207.3 / -21118.9 & Root MSE & $\phantom{-}0.004554$ \\
+\end{tabular}
+\vspace{0.8em}
+
+\noindent\begin{tabular}{@{}l|r@{}l rrr rr@{}}
+\hline
+ & \multicolumn{2}{c}{Coef.} & HAC Std. Err. & $z$ & $P>|z|$ & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+US Net flow (k=-5, post) & $\phantom{-}1.566\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.117\!\times\!10^{-6}$ & $\phantom{-}1.40$ & $0.161$ & $-6.234\!\times\!10^{-7}$ & $\phantom{-}3.755\!\times\!10^{-6}$ \\
+US Net flow (k=-4, post) & $-6.064\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.284\!\times\!10^{-6}$ & $-0.47$ & $0.637$ & $-3.123\!\times\!10^{-6}$ & $\phantom{-}1.910\!\times\!10^{-6}$ \\
+US Net flow (k=-3, post) & $-4.347\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}9.438\!\times\!10^{-7}$ & $-0.46$ & $0.645$ & $-2.284\!\times\!10^{-6}$ & $\phantom{-}1.415\!\times\!10^{-6}$ \\
+US Net flow (k=-2, post) & $\phantom{-}6.270\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}9.947\!\times\!10^{-7}$ & $\phantom{-}0.63$ & $0.528$ & $-1.323\!\times\!10^{-6}$ & $\phantom{-}2.576\!\times\!10^{-6}$ \\
+US Net flow (k=-1, post) & $-3.381\!\times\!10^{-6}$ & \textsuperscript{**} & $\phantom{-}1.621\!\times\!10^{-6}$ & $-2.09$ & $0.037$ & $-6.558\!\times\!10^{-6}$ & $-2.051\!\times\!10^{-7}$ \\
+US Net flow (k=+0, event) & $\phantom{-}8.411\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.277\!\times\!10^{-6}$ & $\phantom{-}0.66$ & $0.510$ & $-1.662\!\times\!10^{-6}$ & $\phantom{-}3.344\!\times\!10^{-6}$ \\
+US Net flow (k=+1, pre) & $\phantom{-}2.061\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}2.156\!\times\!10^{-6}$ & $\phantom{-}0.96$ & $0.339$ & $-2.165\!\times\!10^{-6}$ & $\phantom{-}6.287\!\times\!10^{-6}$ \\
+US Net flow (k=+2, pre) & $\phantom{-}1.364\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.669\!\times\!10^{-6}$ & $\phantom{-}0.82$ & $0.414$ & $-1.907\!\times\!10^{-6}$ & $\phantom{-}4.635\!\times\!10^{-6}$ \\
+US Net flow (k=+3, pre) & $\phantom{-}3.747\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.212\!\times\!10^{-6}$ & $\phantom{-}0.31$ & $0.757$ & $-2.001\!\times\!10^{-6}$ & $\phantom{-}2.751\!\times\!10^{-6}$ \\
+US Net flow (k=+4, pre) & $\phantom{-}1.145\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.045\!\times\!10^{-6}$ & $\phantom{-}1.10$ & $0.273$ & $-9.029\!\times\!10^{-7}$ & $\phantom{-}3.193\!\times\!10^{-6}$ \\
+US Net flow (k=+5, pre) & $-1.509\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.297\!\times\!10^{-6}$ & $-1.16$ & $0.245$ & $-4.051\!\times\!10^{-6}$ & $\phantom{-}1.033\!\times\!10^{-6}$ \\
+\addlinespace[0.3em]
+VIX & $-3.163\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.928\!\times\!10^{-5}$ & $-1.64$ & $0.101$ & $-6.941\!\times\!10^{-5}$ & $\phantom{-}6.155\!\times\!10^{-6}$ \\
+Treasury swap & $-6.108\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}7.245\!\times\!10^{-5}$ & $-0.84$ & $0.399$ & $-2.031\!\times\!10^{-4}$ & $\phantom{-}8.092\!\times\!10^{-5}$ \\
+US release & $\phantom{-}3.199\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.359\!\times\!10^{-4}$ & $\phantom{-}0.95$ & $0.341$ & $-3.385\!\times\!10^{-4}$ & $\phantom{-}9.783\!\times\!10^{-4}$ \\
+\addlinespace[0.3em]
+Constant & $\phantom{-}4.842\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.386\!\times\!10^{-4}$ & $\phantom{-}1.43$ & $0.153$ & $-1.794\!\times\!10^{-4}$ & $\phantom{-}1.148\!\times\!10^{-3}$ \\
+\hline
+\end{tabular}
+\\[0.2em]
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+\vspace{0.9em}
+
+\noindent\textbf{Residual diagnostics}\\[0.3em]
+\begin{tabular}{@{}l|rr l@{}}
+\hline
+Test & Statistic & $p$-value & Null hypothesis \\
+\hline
+Breusch--Pagan LM (heteroskedasticity) & $\phantom{-}166.592$ & $<\!0.001$ & homoskedastic residuals \\
+White LM (heteroskedasticity) & $\phantom{-}285.445$ & $<\!0.001$ & homoskedastic residuals \\
+Breusch--Godfrey LM (10 lags; autocorrelation) & $\phantom{-}20.665$ & $0.024$ & no serial correlation \\
+Ljung--Box Q (10 lags; autocorrelation) & $\phantom{-}20.844$ & $0.022$ & no serial correlation \\
+Jarque--Bera (normality) & $\phantom{-}229.166$ & $<\!0.001$ & normal residuals \\
+Durbin--Watson & $\phantom{-}2.087$ &  & DW $\approx 2$: no first-order autocorrelation \\
+\hline
+\end{tabular}
+\newpage
+\noindent\begin{tabular}{@{}l l @{\hspace{3em}} l r@{}}
+Specification & Net flows & Number of obs & 2,671 \\
+Dependent variable & 100 x log change in e (USD per NZD) & Wald chi2(14) & 18.73 \\
+Sample & 2014-01-09 to 2025-01-31 & Prob $>$ chi2 & 0.1757 \\
+Std. errors & HAC (Newey--West), 10 lags & R-squared & 0.0077 \\
+Condition no. & 231 & Adj R-squared & 0.0025 \\
+AIC / BIC & 5493.7 / 5582.1 & Root MSE & $\phantom{-}0.6748$ \\
+\end{tabular}
+\vspace{0.8em}
+
+\noindent\begin{tabular}{@{}l|r@{}l rrr rr@{}}
+\hline
+ & \multicolumn{2}{c}{Coef.} & HAC Std. Err. & $z$ & $P>|z|$ & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+US Net flow (k=-5, post) & $\phantom{-}2.457\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}1.690\!\times\!10^{-4}$ & $\phantom{-}1.45$ & $0.146$ & $-8.555\!\times\!10^{-5}$ & $\phantom{-}5.769\!\times\!10^{-4}$ \\
+US Net flow (k=-4, post) & $-7.429\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.920\!\times\!10^{-4}$ & $-0.39$ & $0.699$ & $-4.505\!\times\!10^{-4}$ & $\phantom{-}3.019\!\times\!10^{-4}$ \\
+US Net flow (k=-3, post) & $-7.547\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.454\!\times\!10^{-4}$ & $-0.52$ & $0.604$ & $-3.605\!\times\!10^{-4}$ & $\phantom{-}2.095\!\times\!10^{-4}$ \\
+US Net flow (k=-2, post) & $\phantom{-}9.853\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.470\!\times\!10^{-4}$ & $\phantom{-}0.67$ & $0.503$ & $-1.895\!\times\!10^{-4}$ & $\phantom{-}3.866\!\times\!10^{-4}$ \\
+US Net flow (k=-1, post) & $-4.896\!\times\!10^{-4}$ & \textsuperscript{**} & $\phantom{-}2.272\!\times\!10^{-4}$ & $-2.15$ & $0.031$ & $-9.348\!\times\!10^{-4}$ & $-4.429\!\times\!10^{-5}$ \\
+US Net flow (k=+0, event) & $\phantom{-}1.411\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.001\!\times\!10^{-4}$ & $\phantom{-}0.71$ & $0.481$ & $-2.510\!\times\!10^{-4}$ & $\phantom{-}5.333\!\times\!10^{-4}$ \\
+US Net flow (k=+1, pre) & $\phantom{-}3.432\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.195\!\times\!10^{-4}$ & $\phantom{-}1.07$ & $0.283$ & $-2.831\!\times\!10^{-4}$ & $\phantom{-}9.695\!\times\!10^{-4}$ \\
+US Net flow (k=+2, pre) & $\phantom{-}1.994\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.514\!\times\!10^{-4}$ & $\phantom{-}0.79$ & $0.428$ & $-2.933\!\times\!10^{-4}$ & $\phantom{-}6.921\!\times\!10^{-4}$ \\
+US Net flow (k=+3, pre) & $\phantom{-}4.443\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.752\!\times\!10^{-4}$ & $\phantom{-}0.25$ & $0.800$ & $-2.989\!\times\!10^{-4}$ & $\phantom{-}3.877\!\times\!10^{-4}$ \\
+US Net flow (k=+4, pre) & $\phantom{-}1.621\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}1.575\!\times\!10^{-4}$ & $\phantom{-}1.03$ & $0.303$ & $-1.466\!\times\!10^{-4}$ & $\phantom{-}4.708\!\times\!10^{-4}$ \\
+US Net flow (k=+5, pre) & $-2.097\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}1.913\!\times\!10^{-4}$ & $-1.10$ & $0.273$ & $-5.846\!\times\!10^{-4}$ & $\phantom{-}1.653\!\times\!10^{-4}$ \\
+\addlinespace[0.3em]
+VIX & $-5.051\!\times\!10^{-3}$ & \textsuperscript{} & $\phantom{-}3.139\!\times\!10^{-3}$ & $-1.61$ & $0.108$ & $-1.120\!\times\!10^{-2}$ & $\phantom{-}1.102\!\times\!10^{-3}$ \\
+Treasury swap & $-7.222\!\times\!10^{-3}$ & \textsuperscript{} & $\phantom{-}9.880\!\times\!10^{-3}$ & $-0.73$ & $0.465$ & $-2.659\!\times\!10^{-2}$ & $\phantom{-}1.214\!\times\!10^{-2}$ \\
+US release & $\phantom{-}5.332\!\times\!10^{-2}$ & \textsuperscript{} & $\phantom{-}5.097\!\times\!10^{-2}$ & $\phantom{-}1.05$ & $0.296$ & $-4.658\!\times\!10^{-2}$ & $\phantom{-}1.532\!\times\!10^{-1}$ \\
+\addlinespace[0.3em]
+Constant & $\phantom{-}7.616\!\times\!10^{-2}$ & \textsuperscript{} & $\phantom{-}5.444\!\times\!10^{-2}$ & $\phantom{-}1.40$ & $0.162$ & $-3.054\!\times\!10^{-2}$ & $\phantom{-}1.829\!\times\!10^{-1}$ \\
+\hline
+\end{tabular}
+\\[0.2em]
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+\vspace{0.9em}
+
+\noindent\textbf{Residual diagnostics}\\[0.3em]
+\begin{tabular}{@{}l|rr l@{}}
+\hline
+Test & Statistic & $p$-value & Null hypothesis \\
+\hline
+Breusch--Pagan LM (heteroskedasticity) & $\phantom{-}203.767$ & $<\!0.001$ & homoskedastic residuals \\
+White LM (heteroskedasticity) & $\phantom{-}365.506$ & $<\!0.001$ & homoskedastic residuals \\
+Breusch--Godfrey LM (10 lags; autocorrelation) & $\phantom{-}25.299$ & $0.005$ & no serial correlation \\
+Ljung--Box Q (10 lags; autocorrelation) & $\phantom{-}25.551$ & $0.004$ & no serial correlation \\
+Jarque--Bera (normality) & $\phantom{-}242.809$ & $<\!0.001$ & normal residuals \\
+Durbin--Watson & $\phantom{-}2.095$ &  & DW $\approx 2$: no first-order autocorrelation \\
+\hline
+\end{tabular}
+\end{document}
