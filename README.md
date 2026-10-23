@@ -5,10 +5,10 @@ This repository contains work relevant to ECON 181 Fintech Practicum.
 
 To run the regression script, the following files need to be present in the `nz_bond_flows/regression` directory:
 
-Controls - Regression Control Panel.csv
-FX.csv
-nz_daily_flows.csv
-US_Share_of_New_Zealand_Debt.xlsx - Regression Series.csv
+* Controls - Regression Control Panel.csv
+* FX.csv
+* nz_daily_flows.csv
+* US_Share_of_New_Zealand_Debt.xlsx - Regression Series.csv
 
 They can be found in the regression folder in shared Google Drive and must be placed manually.
 
