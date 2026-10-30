@@ -75,3 +75,8 @@ Team-file provenance, clarified by the user (2026-10-30) and checked against the
 - `raw/Controls.xlsx` (SHA256 see `output/attempts/00_gate0_baseline/input_hashes.csv` after rerun of `gate0_diagnostics.py`): `treasury_swap_merged` = NZ 2y swap (RBNZ B2) minus US 2y (FRED DGS2) from 2011-01-05, spliced with the 11am NZ 2y government yield (legacy B2) before 2011; `us_release` = US CPI or payrolls release date (ALFRED vintage dates). Sources and caveats in the workbook sheets `Notes` and `Summary`. Superseded for A1r by window-change controls built from S12, S13-S15.
 - `raw/US_Share_of_New_Zealand_Debt.xlsx`: IMF Portfolio Investment Positions by Counterpart Economy, half-yearly. Verified in sheet `Calcs and Graphs`: the value dated 2014-01-01 is the 2014-S1 position (US 14,994.2 / NZ-announced debt 94,886.99 = 0.158022), i.e. a period-end position applied from the start of that half-year, and held constant until the next half-year. Publication lag of the IMF release is not recorded; position-date look-ahead up to 6 months.
 - Hashes of the team workbooks: `raw/Controls.xlsx` `c261fd7ab487122ab1584e818df912cea5e463112ecc25abcf5106a9b2625ff0`; `raw/US_Share_of_New_Zealand_Debt.xlsx` `180a4c4ee99380a66abd44d5be6d3b8414ab3b9810ac90b17f7a92d4564bd824` (recorded 2026-10-30; both are source files of S03/S04, `source` = team work).
+
+## Status update 2026-10-30 (cleanup)
+
+- BLOCKED_DATA B1/B2: **resolved** by the human on 2026-10-30; files are S11a/b and S12a/b above. The 403 on automated access still applies, so refreshes need the same manual download.
+- S19 (`DTWEXBGS_fred.csv`) and S18 (`NASDAQCOM_fred.csv`) are registered for provenance but unused by any model; S18 was used only in the control screen.
