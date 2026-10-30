@@ -2,7 +2,6 @@
 import os
 import re
 import pandas as pd
-import holidays
 
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "raw") + "/"   # put the 8 source files in ../raw
 
@@ -145,6 +144,7 @@ def cpi():
 
 def nz_business_days(start="1995-01-01", end="2027-12-31"):
     """Wellington business days: weekdays that are not NZ national holidays or Wellington Anniversary Day."""
+    import holidays  # imported here so the other readers work without the builder-only dependency
     hol = holidays.NZ(subdiv="WGN", years=range(1995, 2028))
     days = pd.bdate_range(start, end)
     return days[~days.isin(pd.to_datetime(list(hol.keys())))], hol
