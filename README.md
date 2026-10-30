@@ -10,9 +10,13 @@ nz_bond_flows/                NZ government bond flow pipeline + regressions
   raw/                        Source files for the flow builder
   code/                       build.py, load.py, write.py, run_regressions.py, tests
   regression/                 Regression inputs (placed manually, see below)
-  output/                     Generated: flows workbook, tables, hypothesis tests, intermediate/
+  output/                     Generated: flows workbook, tables, hypothesis tests, intermediate/, attempts/
+                              (attempts/<id>/ holds only the latest version of each attempt)
   docs/                       METHODOLOGY.md, method PDF, RUN.txt (build instructions)
   scratch/                    Experimental scripts, not part of the pipeline
+ATTEMPTS.md                   Append-only journal of every specification and result (canonical history)
+DATA_SOURCES.md               Provenance register: hashes, landing pages, timing conventions
+PLAN.md                       Research protocol
 reference/
   papers/                     Background literature
   braeuer_hau_replication/    Third-party replication package (read-only reference)
