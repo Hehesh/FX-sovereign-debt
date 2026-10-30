@@ -80,3 +80,5 @@ Team-file provenance, clarified by the user (2026-10-30) and checked against the
 
 - BLOCKED_DATA B1/B2: **resolved** by the human on 2026-10-30; files are S11a/b and S12a/b above. The 403 on automated access still applies, so refreshes need the same manual download.
 - S19 (`DTWEXBGS_fred.csv`) and S18 (`NASDAQCOM_fred.csv`) are registered for provenance but unused by any model; S18 was used only in the control screen.
+
+- 2026-10-30: S18 (`NASDAQCOM_fred.csv`) and S19 (`DTWEXBGS_fred.csv`) deleted from `raw/public/` at the user's request (unused). Hashes remain recorded above; recover from git commit c3d8baa if needed.
