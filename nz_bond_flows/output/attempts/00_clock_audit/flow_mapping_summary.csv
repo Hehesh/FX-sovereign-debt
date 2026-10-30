@@ -1,0 +1,8 @@
+item,value
+flow rows (all calendar days),9739.0
+rows with any nonzero flow,1202.0
+nonzero rows on non-NZ business day,0.0
+nonzero rows moved to later FX date,130.0
+  of which NZ business day (US/FX-calendar roll),130.0
+nonzero rows dropped (used = False),111.0
+"median roll length, calendar days (nonzero moved rows)",1.0

@@ -1,0 +1,25 @@
+model,outcome,test,stat,p
+Net flows,delta_e,Breusch–Pagan LM (heteroskedasticity),166.592,3.33768e-28
+Net flows,delta_e,White LM (heteroskedasticity),285.445,6.74408e-16
+Net flows,delta_e,Breusch–Godfrey LM (10 lags; autocorrelation),20.6653,0.0235522
+Net flows,delta_e,Ljung–Box Q (10 lags; autocorrelation),20.8445,0.0222045
+Net flows,delta_e,Jarque–Bera (normality),229.166,1.72643e-50
+Net flows,delta_e,Durbin–Watson,2.0873,
+Disaggregated,delta_e,Breusch–Pagan LM (heteroskedasticity),176.385,7.0591e-24
+Disaggregated,delta_e,White LM (heteroskedasticity),338.41,9.52632e-07
+Disaggregated,delta_e,Breusch–Godfrey LM (10 lags; autocorrelation),21.2572,0.0193699
+Disaggregated,delta_e,Ljung–Box Q (10 lags; autocorrelation),21.3771,0.018612
+Disaggregated,delta_e,Jarque–Bera (normality),230.127,1.06772e-50
+Disaggregated,delta_e,Durbin–Watson,2.09178,
+Net flows,log_return_pct,Breusch–Pagan LM (heteroskedasticity),203.767,9.33318e-36
+Net flows,log_return_pct,White LM (heteroskedasticity),365.506,4.09796e-27
+Net flows,log_return_pct,Breusch–Godfrey LM (10 lags; autocorrelation),25.2995,0.00480581
+Net flows,log_return_pct,Ljung–Box Q (10 lags; autocorrelation),25.5511,0.00439324
+Net flows,log_return_pct,Jarque–Bera (normality),242.809,1.88199e-53
+Net flows,log_return_pct,Durbin–Watson,2.09498,
+Disaggregated,log_return_pct,Breusch–Pagan LM (heteroskedasticity),213.271,7.21058e-31
+Disaggregated,log_return_pct,White LM (heteroskedasticity),413.331,1.5405e-13
+Disaggregated,log_return_pct,Breusch–Godfrey LM (10 lags; autocorrelation),25.92,0.00384935
+Disaggregated,log_return_pct,Ljung–Box Q (10 lags; autocorrelation),26.1004,0.00360745
+Disaggregated,log_return_pct,Jarque–Bera (normality),243.077,1.64606e-53
+Disaggregated,log_return_pct,Durbin–Watson,2.0994,

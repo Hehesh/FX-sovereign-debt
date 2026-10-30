@@ -1,0 +1,5 @@
+event,n_events,median_gap_sessions,share_gaps_le_10,sessions_in_any_window
+principal>0,8,273.0,0.0,84
+issuance>0,445,5.0,0.9054054054054054,2429
+coupon>0,135,18.0,0.31343283582089554,1109
+buyback>0,52,10.0,0.7058823529411765,488
