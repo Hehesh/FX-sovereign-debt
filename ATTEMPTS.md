@@ -206,3 +206,12 @@ Conventions: FX `e` = USD per NZD (higher = NZD appreciation). Flow units NZ$ mi
 - **Interpretation:** scaling by outstanding debt, using the measured non-resident share and allowing stress dependence does not reveal an FX response to issuance. This is consistent with absorption by FX intermediaries or with pre-pricing and hedging, but the data cannot separate these. It does not test conversion because none of the transmission stages is observed.
 - **Limitations:** aggregate non-resident share applied to new issuance (actual allotment by holder unobserved) and to principal (the maturing bond's own share is known and differs); D31 publication lag unverified; one state variable; no horizon beyond five sessions; ZI is an accounting scale, with correlation to supply announcements unmodeled.
 - **Next (at most one):** A5(b), NZ government 2/5/10-year yields from B2 against the same pressure variables, because the proximate market effect of issuance is yield/price, and the B2 files are local. Check the Aug 2025 B2 methodology change first (sample ends 2025-02, so before the break).
+
+---
+
+## Direction note — 2026-10-30 (after A3)
+
+- **User direction:** the objective is predicting FX level, change or volume. NZ-only evidence so far: G0 and A1r indeterminate (CI too wide to inform), A3 a supported null for issuance pressure at the declared bound, principal underpowered (7-8 events). The user considers NZ possibly a dead end and expansion to other currency pairs a candidate conclusion.
+- **Consequences recorded:** (1) A5(b) (NZ yield outcome) is deprioritized, since it is not an FX outcome; it remains available. (2) PLAN.md restricts scope to NZ and says other countries are research leads, so any cross-country or cross-currency-pair work needs an explicit user scope change first; nothing was started. (3) Cross rates of NZD (AUD, JPY, EUR) remain a plan-sanctioned robustness check, dependent on NZD/USD, not an independent sample.
+- **What a cross-country extension would reuse:** `code/timing.py` (fixing windows), the window-change controls in `code/attempt1r.py`, and the pressure construction in `code/attempt3.py`. What it would need: country-specific settlement calendars and times, holder-composition data (IMF PIP, `data/` folder), debt outstanding and daily flow schedules, and fixing sources per currency (H.10 covers MXN, ZAR-excluded; check `FX.csv` columns dexalus, dexjpus, dexszus).
+- **Status of repository:** all attempts through A3 committed; tests pass (8); outputs hold only the latest version per attempt.
