@@ -1,0 +1,18 @@
+{
+  "base_dir": "/Users/braydenchien/Desktop/Trading/Practicum/nz_bond_flows",
+  "weekend_policy": "next-fx-day",
+  "missing_flow_policy": "missing",
+  "hac_lags": 10,
+  "n_fx_days": 6294,
+  "n_source_flow_dates_mapped": 9139,
+  "n_flow_rows_moved": 3465,
+  "n_fx_dates_missing_flow_records": 20,
+  "us_share_handling": "backward as-of / last observed share; no backfill",
+  "us_share_input": "0\u20131 fractions or explicitly marked percentages, converted to 0\u20131",
+  "fx_input_quote": "nzd-per-usd",
+  "fx_outcome_quote": "usd-per-nzd",
+  "flow_sign_handling": "source issuance negative, repayments positive; model uses positive magnitudes; net flow = issuance - principal - coupon - buyback",
+  "unit_handling": "cash flow units unchanged from input; no automatic division by 1e9",
+  "date_handling": "leads/lags count observed FX sessions, not calendar days",
+  "interpretation_warning": "US-holder weighted is not all foreign-held; associations not causal."
+}

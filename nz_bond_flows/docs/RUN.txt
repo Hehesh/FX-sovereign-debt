@@ -1,0 +1,16 @@
+Reproduces NZ_govt_bond_daily_flows.xlsx exactly. Python 3.11+, pandas, openpyxl, holidays.
+1. Put the 8 source files in a folder "raw" next to this "code" folder, named:
+   onissue.xlsx, hd31.xlsx, iib.xlsx, tender.xlsx, syndication.xlsx, repurchase.xlsx, nonmarket.xlsx, cpi_oecd_fred.csv
+2. From the folder above "code":
+   python code/build.py code out/build.pkl
+   python code/write.py code out/build.pkl out/NZ_govt_bond_daily_flows.xlsx out/nz_daily_flows.csv
+
+Regressions (from nz_bond_flows/; use the Trading Python environment):
+   python code/run_regressions.py
+Dependencies: numpy, pandas, scipy, statsmodels, matplotlib, and a system pdflatex.
+Inputs are read from regression/; results are written to output/. The report output is five standalone LaTeX/PDF tables: two regression reports and three hypothesis-test reports.
+The supplied FX.csv is NZD per USD and is inverted by default. For an input already
+in USD per NZD, pass --fx-quote usd-per-nzd. Shares accept 15.80% or 0.158.
+The flow builder's negative issuance is converted to positive issuance magnitudes.
+Data-contract checks:
+   python -m unittest discover -s code -p 'test_*.py'

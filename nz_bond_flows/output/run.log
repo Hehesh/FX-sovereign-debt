@@ -1,0 +1,7 @@
+INFO: Base=/Users/braydenchien/Desktop/Trading/Practicum/nz_bond_flows; weekend=next-fx-day; missing-flow=missing; input FX=nzd-per-usd
+INFO: Off-calendar flow rows: 3465; dropped rows: 600
+INFO: Net flows — Level change: n=2671, adj R2=0.0020
+INFO: Disaggregated — Level change: n=2671, adj R2=0.0029
+INFO: Net flows — Log return (%): n=2671, adj R2=0.0025
+INFO: Disaggregated — Log return (%): n=2671, adj R2=0.0036
+INFO: Finished. All outputs: /Users/braydenchien/Desktop/Trading/Practicum/nz_bond_flows/output
