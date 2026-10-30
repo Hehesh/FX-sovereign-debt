@@ -1,0 +1,2 @@
+b0_plus_b1,se,ci95_lo,ci95_hi,p_hac,placebo_p,placebo_sd,mde_80pct,n,n_nonzero_flow_windows,first,last,adj_r2
+0.40763,0.39545,-0.36744,1.1827,0.30263,0.17667,0.29954,1.1073,2773,607,2014-01-02,2025-02-06,0.037119
