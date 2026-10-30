@@ -1,0 +1,16 @@
+,value
+n_windows,2377
+n_issuance_windows,410
+n_principal_windows,7
+ZI_nonzero_mean,0.2515441652770655
+ZI_nonzero_sd,0.3921409182229335
+ZI_nonzero_max,4.225806740368341
+first,2015-08-03
+last,2025-02-07
+n_isolated_issuance_windows,17
+placebo_p_dI_h1,0.7366666666666667
+placebo_p_dP_h1,0.13666666666666666
+loo_dP_h1_range,"(np.float64(-0.0324), np.float64(-0.0089))"
+holm_p_dI_by_h,"{0: np.float64(1.0), 1: np.float64(1.0), 3: np.float64(1.0), 5: np.float64(1.0)}"
+pre_window_ZI_p,0.4342571963046127
+pre_window_ZIxS_p,0.2369435552203013

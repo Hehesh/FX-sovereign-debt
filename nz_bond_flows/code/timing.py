@@ -27,3 +27,11 @@ def window_changes(values: pd.Series, obs_utc: pd.DatetimeIndex, fix_utc: pd.Dat
     pos = st.searchsorted(fix_utc, side='right') - 1
     level = np.where(pos >= 0, v[np.clip(pos, 0, None)], np.nan)
     return np.r_[np.nan, np.diff(level)]
+
+
+def level_at(values: pd.Series, obs_utc: pd.DatetimeIndex, at_utc: pd.DatetimeIndex) -> np.ndarray:
+    """Last observation stamped at or before each instant (NaN observations skipped)."""
+    keep = values.notna().to_numpy()
+    v, st = values.to_numpy()[keep], obs_utc[keep]
+    pos = st.searchsorted(at_utc, side='right') - 1
+    return np.where(pos >= 0, v[np.clip(pos, 0, None)], np.nan)
