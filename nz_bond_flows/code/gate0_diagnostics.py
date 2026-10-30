@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import sys
+import tempfile
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -177,9 +178,9 @@ def main() -> None:
     G0.mkdir(parents=True, exist_ok=True)
     CA.mkdir(parents=True, exist_ok=True)
     hash_inputs()
-    scratch = G0 / 'rebuilt'
-    (scratch / 'intermediate').mkdir(parents=True, exist_ok=True)
-    raw, _ = rr.construct_data(BASE, scratch, 'next-fx-day', 'missing')
+    with tempfile.TemporaryDirectory() as tmp:  # construct_data writes its panel; the baseline copy is in output/intermediate
+        (Path(tmp) / 'intermediate').mkdir()
+        raw, _ = rr.construct_data(BASE, Path(tmp), 'next-fx-day', 'missing')
     results = coefficient_tables(raw)
     res, frame = results[('Disaggregated', OUTCOME)]
     sample_accounting(raw, frame).to_csv(G0 / 'sample_accounting.csv', index=False)
