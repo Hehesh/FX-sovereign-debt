@@ -1,0 +1,142 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{document}
+\begin{center}\large\textbf{Disaggregated: OLS with HAC standard errors}\end{center}
+\noindent\begin{tabular}{@{}l l @{\hspace{3em}} l r@{}}
+Specification & Disaggregated & Number of obs & 2,671 \\
+Dependent variable & Level change in e (USD per NZD) & Wald chi2(27) & 70.28 \\
+Sample & 2014-01-09 to 2025-01-31 & Prob $>$ chi2 & 0.0000 \\
+Std. errors & HAC (Newey--West), 10 lags & R-squared & 0.0130 \\
+Condition no. & 203.3 & Adj R-squared & 0.0029 \\
+AIC / BIC & -21196.9 / -21032.0 & Root MSE & $\phantom{-}0.004552$ \\
+\end{tabular}
+\vspace{0.8em}
+
+\noindent\begin{tabular}{@{}l|r@{}l rrr rr@{}}
+\hline
+ & \multicolumn{2}{c}{Coef.} & HAC Std. Err. & $z$ & $P>|z|$ & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+US Issuance (k=-5, post) & $\phantom{-}2.575\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.722\!\times\!10^{-6}$ & $\phantom{-}1.50$ & $0.135$ & $-8.003\!\times\!10^{-7}$ & $\phantom{-}5.950\!\times\!10^{-6}$ \\
+US Issuance (k=-4, post) & $-2.839\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.864\!\times\!10^{-6}$ & $-1.52$ & $0.128$ & $-6.493\!\times\!10^{-6}$ & $\phantom{-}8.144\!\times\!10^{-7}$ \\
+US Issuance (k=-3, post) & $-1.709\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.544\!\times\!10^{-6}$ & $-1.11$ & $0.268$ & $-4.735\!\times\!10^{-6}$ & $\phantom{-}1.318\!\times\!10^{-6}$ \\
+US Issuance (k=-2, post) & $\phantom{-}1.599\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.663\!\times\!10^{-6}$ & $\phantom{-}0.96$ & $0.336$ & $-1.661\!\times\!10^{-6}$ & $\phantom{-}4.859\!\times\!10^{-6}$ \\
+US Issuance (k=-1, post) & $-1.931\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}2.262\!\times\!10^{-6}$ & $-0.85$ & $0.393$ & $-6.365\!\times\!10^{-6}$ & $\phantom{-}2.503\!\times\!10^{-6}$ \\
+US Issuance (k=+0, event) & $\phantom{-}1.549\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.916\!\times\!10^{-6}$ & $\phantom{-}0.81$ & $0.419$ & $-2.206\!\times\!10^{-6}$ & $\phantom{-}5.305\!\times\!10^{-6}$ \\
+US Issuance (k=+1, pre) & $\phantom{-}5.219\!\times\!10^{-6}$ & \textsuperscript{**} & $\phantom{-}2.267\!\times\!10^{-6}$ & $\phantom{-}2.30$ & $0.021$ & $\phantom{-}7.765\!\times\!10^{-7}$ & $\phantom{-}9.662\!\times\!10^{-6}$ \\
+US Issuance (k=+2, pre) & $\phantom{-}3.796\!\times\!10^{-6}$ & \textsuperscript{**} & $\phantom{-}1.795\!\times\!10^{-6}$ & $\phantom{-}2.11$ & $0.034$ & $\phantom{-}2.775\!\times\!10^{-7}$ & $\phantom{-}7.314\!\times\!10^{-6}$ \\
+US Issuance (k=+3, pre) & $-3.565\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.402\!\times\!10^{-6}$ & $-0.25$ & $0.799$ & $-3.104\!\times\!10^{-6}$ & $\phantom{-}2.391\!\times\!10^{-6}$ \\
+US Issuance (k=+4, pre) & $\phantom{-}2.768\!\times\!10^{-6}$ & \textsuperscript{*} & $\phantom{-}1.608\!\times\!10^{-6}$ & $\phantom{-}1.72$ & $0.085$ & $-3.833\!\times\!10^{-7}$ & $\phantom{-}5.920\!\times\!10^{-6}$ \\
+US Issuance (k=+5, pre) & $-1.963\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.695\!\times\!10^{-6}$ & $-0.12$ & $0.908$ & $-3.519\!\times\!10^{-6}$ & $\phantom{-}3.126\!\times\!10^{-6}$ \\
+\addlinespace[0.3em]
+US Principal (k=-5, post) & $\phantom{-}6.203\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.032\!\times\!10^{-6}$ & $\phantom{-}0.60$ & $0.548$ & $-1.403\!\times\!10^{-6}$ & $\phantom{-}2.644\!\times\!10^{-6}$ \\
+US Principal (k=-4, post) & $-1.321\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}2.125\!\times\!10^{-6}$ & $-0.62$ & $0.534$ & $-5.486\!\times\!10^{-6}$ & $\phantom{-}2.844\!\times\!10^{-6}$ \\
+US Principal (k=-3, post) & $-3.885\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.061\!\times\!10^{-6}$ & $-0.37$ & $0.714$ & $-2.468\!\times\!10^{-6}$ & $\phantom{-}1.691\!\times\!10^{-6}$ \\
+US Principal (k=-2, post) & $\phantom{-}7.371\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.538\!\times\!10^{-6}$ & $\phantom{-}0.48$ & $0.632$ & $-2.277\!\times\!10^{-6}$ & $\phantom{-}3.752\!\times\!10^{-6}$ \\
+US Principal (k=-1, post) & $\phantom{-}5.455\!\times\!10^{-6}$ & \textsuperscript{**} & $\phantom{-}2.143\!\times\!10^{-6}$ & $\phantom{-}2.55$ & $0.011$ & $\phantom{-}1.255\!\times\!10^{-6}$ & $\phantom{-}9.656\!\times\!10^{-6}$ \\
+US Principal (k=+0, event) & $-1.567\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}2.035\!\times\!10^{-6}$ & $-0.77$ & $0.441$ & $-5.555\!\times\!10^{-6}$ & $\phantom{-}2.422\!\times\!10^{-6}$ \\
+US Principal (k=+1, pre) & $\phantom{-}9.502\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}3.509\!\times\!10^{-6}$ & $\phantom{-}0.27$ & $0.787$ & $-5.928\!\times\!10^{-6}$ & $\phantom{-}7.828\!\times\!10^{-6}$ \\
+US Principal (k=+2, pre) & $\phantom{-}8.383\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}3.473\!\times\!10^{-6}$ & $\phantom{-}0.24$ & $0.809$ & $-5.968\!\times\!10^{-6}$ & $\phantom{-}7.645\!\times\!10^{-6}$ \\
+US Principal (k=+3, pre) & $-1.960\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}2.273\!\times\!10^{-6}$ & $-0.86$ & $0.388$ & $-6.414\!\times\!10^{-6}$ & $\phantom{-}2.494\!\times\!10^{-6}$ \\
+US Principal (k=+4, pre) & $\phantom{-}6.644\!\times\!10^{-7}$ & \textsuperscript{} & $\phantom{-}1.491\!\times\!10^{-6}$ & $\phantom{-}0.45$ & $0.656$ & $-2.257\!\times\!10^{-6}$ & $\phantom{-}3.586\!\times\!10^{-6}$ \\
+US Principal (k=+5, pre) & $\phantom{-}3.875\!\times\!10^{-6}$ & \textsuperscript{**} & $\phantom{-}1.623\!\times\!10^{-6}$ & $\phantom{-}2.39$ & $0.017$ & $\phantom{-}6.936\!\times\!10^{-7}$ & $\phantom{-}7.057\!\times\!10^{-6}$ \\
+\addlinespace[0.3em]
+US coupon & $\phantom{-}9.588\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}1.053\!\times\!10^{-5}$ & $\phantom{-}0.91$ & $0.362$ & $-1.104\!\times\!10^{-5}$ & $\phantom{-}3.022\!\times\!10^{-5}$ \\
+US buyback & $\phantom{-}1.903\!\times\!10^{-6}$ & \textsuperscript{} & $\phantom{-}7.607\!\times\!10^{-6}$ & $\phantom{-}0.25$ & $0.802$ & $-1.301\!\times\!10^{-5}$ & $\phantom{-}1.681\!\times\!10^{-5}$ \\
+VIX & $-3.550\!\times\!10^{-5}$ & \textsuperscript{*} & $\phantom{-}1.922\!\times\!10^{-5}$ & $-1.85$ & $0.065$ & $-7.317\!\times\!10^{-5}$ & $\phantom{-}2.166\!\times\!10^{-6}$ \\
+Treasury swap & $-5.214\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}7.122\!\times\!10^{-5}$ & $-0.73$ & $0.464$ & $-1.917\!\times\!10^{-4}$ & $\phantom{-}8.745\!\times\!10^{-5}$ \\
+US release & $\phantom{-}3.328\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.376\!\times\!10^{-4}$ & $\phantom{-}0.99$ & $0.324$ & $-3.288\!\times\!10^{-4}$ & $\phantom{-}9.944\!\times\!10^{-4}$ \\
+\addlinespace[0.3em]
+Constant & $\phantom{-}4.178\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.225\!\times\!10^{-4}$ & $\phantom{-}1.30$ & $0.195$ & $-2.142\!\times\!10^{-4}$ & $\phantom{-}1.050\!\times\!10^{-3}$ \\
+\hline
+\end{tabular}
+\\[0.2em]
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+\vspace{0.9em}
+
+\noindent\textbf{Residual diagnostics}\\[0.3em]
+\begin{tabular}{@{}l|rr l@{}}
+\hline
+Test & Statistic & $p$-value & Null hypothesis \\
+\hline
+Breusch--Pagan LM (heteroskedasticity) & $\phantom{-}176.385$ & $<\!0.001$ & homoskedastic residuals \\
+White LM (heteroskedasticity) & $\phantom{-}338.410$ & $<\!0.001$ & homoskedastic residuals \\
+Breusch--Godfrey LM (10 lags; autocorrelation) & $\phantom{-}21.257$ & $0.019$ & no serial correlation \\
+Ljung--Box Q (10 lags; autocorrelation) & $\phantom{-}21.377$ & $0.019$ & no serial correlation \\
+Jarque--Bera (normality) & $\phantom{-}230.127$ & $<\!0.001$ & normal residuals \\
+Durbin--Watson & $\phantom{-}2.092$ &  & DW $\approx 2$: no first-order autocorrelation \\
+\hline
+\end{tabular}
+\newpage
+\noindent\begin{tabular}{@{}l l @{\hspace{3em}} l r@{}}
+Specification & Disaggregated & Number of obs & 2,671 \\
+Dependent variable & 100 x log change in e (USD per NZD) & Wald chi2(27) & 75.27 \\
+Sample & 2014-01-09 to 2025-01-31 & Prob $>$ chi2 & 0.0000 \\
+Std. errors & HAC (Newey--West), 10 lags & R-squared & 0.0137 \\
+Condition no. & 203.3 & Adj R-squared & 0.0036 \\
+AIC / BIC & 5503.6 / 5668.5 & Root MSE & $\phantom{-}0.6744$ \\
+\end{tabular}
+\vspace{0.8em}
+
+\noindent\begin{tabular}{@{}l|r@{}l rrr rr@{}}
+\hline
+ & \multicolumn{2}{c}{Coef.} & HAC Std. Err. & $z$ & $P>|z|$ & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+US Issuance (k=-5, post) & $\phantom{-}3.955\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.622\!\times\!10^{-4}$ & $\phantom{-}1.51$ & $0.132$ & $-1.185\!\times\!10^{-4}$ & $\phantom{-}9.095\!\times\!10^{-4}$ \\
+US Issuance (k=-4, post) & $-4.240\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.823\!\times\!10^{-4}$ & $-1.50$ & $0.133$ & $-9.772\!\times\!10^{-4}$ & $\phantom{-}1.293\!\times\!10^{-4}$ \\
+US Issuance (k=-3, post) & $-2.745\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.406\!\times\!10^{-4}$ & $-1.14$ & $0.254$ & $-7.460\!\times\!10^{-4}$ & $\phantom{-}1.970\!\times\!10^{-4}$ \\
+US Issuance (k=-2, post) & $\phantom{-}2.756\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.595\!\times\!10^{-4}$ & $\phantom{-}1.06$ & $0.288$ & $-2.330\!\times\!10^{-4}$ & $\phantom{-}7.841\!\times\!10^{-4}$ \\
+US Issuance (k=-1, post) & $-3.329\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.471\!\times\!10^{-4}$ & $-0.96$ & $0.338$ & $-1.013\!\times\!10^{-3}$ & $\phantom{-}3.475\!\times\!10^{-4}$ \\
+US Issuance (k=+0, event) & $\phantom{-}2.550\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.986\!\times\!10^{-4}$ & $\phantom{-}0.85$ & $0.393$ & $-3.303\!\times\!10^{-4}$ & $\phantom{-}8.402\!\times\!10^{-4}$ \\
+US Issuance (k=+1, pre) & $\phantom{-}7.934\!\times\!10^{-4}$ & \textsuperscript{**} & $\phantom{-}3.529\!\times\!10^{-4}$ & $\phantom{-}2.25$ & $0.025$ & $\phantom{-}1.017\!\times\!10^{-4}$ & $\phantom{-}1.485\!\times\!10^{-3}$ \\
+US Issuance (k=+2, pre) & $\phantom{-}5.936\!\times\!10^{-4}$ & \textsuperscript{**} & $\phantom{-}2.791\!\times\!10^{-4}$ & $\phantom{-}2.13$ & $0.033$ & $\phantom{-}4.660\!\times\!10^{-5}$ & $\phantom{-}1.141\!\times\!10^{-3}$ \\
+US Issuance (k=+3, pre) & $-7.434\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}2.164\!\times\!10^{-4}$ & $-0.34$ & $0.731$ & $-4.984\!\times\!10^{-4}$ & $\phantom{-}3.497\!\times\!10^{-4}$ \\
+US Issuance (k=+4, pre) & $\phantom{-}4.313\!\times\!10^{-4}$ & \textsuperscript{*} & $\phantom{-}2.479\!\times\!10^{-4}$ & $\phantom{-}1.74$ & $0.082$ & $-5.452\!\times\!10^{-5}$ & $\phantom{-}9.172\!\times\!10^{-4}$ \\
+US Issuance (k=+5, pre) & $-2.901\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}2.648\!\times\!10^{-4}$ & $-0.11$ & $0.913$ & $-5.480\!\times\!10^{-4}$ & $\phantom{-}4.900\!\times\!10^{-4}$ \\
+\addlinespace[0.3em]
+US Principal (k=-5, post) & $\phantom{-}9.296\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.456\!\times\!10^{-4}$ & $\phantom{-}0.64$ & $0.523$ & $-1.923\!\times\!10^{-4}$ & $\phantom{-}3.782\!\times\!10^{-4}$ \\
+US Principal (k=-4, post) & $-2.469\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.257\!\times\!10^{-4}$ & $-0.76$ & $0.448$ & $-8.854\!\times\!10^{-4}$ & $\phantom{-}3.915\!\times\!10^{-4}$ \\
+US Principal (k=-3, post) & $-5.530\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}1.617\!\times\!10^{-4}$ & $-0.34$ & $0.732$ & $-3.722\!\times\!10^{-4}$ & $\phantom{-}2.616\!\times\!10^{-4}$ \\
+US Principal (k=-2, post) & $\phantom{-}1.284\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.288\!\times\!10^{-4}$ & $\phantom{-}0.56$ & $0.575$ & $-3.201\!\times\!10^{-4}$ & $\phantom{-}5.769\!\times\!10^{-4}$ \\
+US Principal (k=-1, post) & $\phantom{-}7.504\!\times\!10^{-4}$ & \textsuperscript{***} & $\phantom{-}2.768\!\times\!10^{-4}$ & $\phantom{-}2.71$ & $0.007$ & $\phantom{-}2.079\!\times\!10^{-4}$ & $\phantom{-}1.293\!\times\!10^{-3}$ \\
+US Principal (k=+0, event) & $-2.309\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.225\!\times\!10^{-4}$ & $-0.72$ & $0.474$ & $-8.631\!\times\!10^{-4}$ & $\phantom{-}4.012\!\times\!10^{-4}$ \\
+US Principal (k=+1, pre) & $\phantom{-}7.014\!\times\!10^{-5}$ & \textsuperscript{} & $\phantom{-}5.168\!\times\!10^{-4}$ & $\phantom{-}0.14$ & $0.892$ & $-9.427\!\times\!10^{-4}$ & $\phantom{-}1.083\!\times\!10^{-3}$ \\
+US Principal (k=+2, pre) & $\phantom{-}1.778\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}5.088\!\times\!10^{-4}$ & $\phantom{-}0.35$ & $0.727$ & $-8.194\!\times\!10^{-4}$ & $\phantom{-}1.175\!\times\!10^{-3}$ \\
+US Principal (k=+3, pre) & $-2.565\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}3.186\!\times\!10^{-4}$ & $-0.81$ & $0.421$ & $-8.809\!\times\!10^{-4}$ & $\phantom{-}3.680\!\times\!10^{-4}$ \\
+US Principal (k=+4, pre) & $\phantom{-}1.251\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}2.209\!\times\!10^{-4}$ & $\phantom{-}0.57$ & $0.571$ & $-3.078\!\times\!10^{-4}$ & $\phantom{-}5.580\!\times\!10^{-4}$ \\
+US Principal (k=+5, pre) & $\phantom{-}5.357\!\times\!10^{-4}$ & \textsuperscript{**} & $\phantom{-}2.229\!\times\!10^{-4}$ & $\phantom{-}2.40$ & $0.016$ & $\phantom{-}9.884\!\times\!10^{-5}$ & $\phantom{-}9.726\!\times\!10^{-4}$ \\
+\addlinespace[0.3em]
+US coupon & $\phantom{-}1.357\!\times\!10^{-3}$ & \textsuperscript{} & $\phantom{-}1.558\!\times\!10^{-3}$ & $\phantom{-}0.87$ & $0.384$ & $-1.697\!\times\!10^{-3}$ & $\phantom{-}4.411\!\times\!10^{-3}$ \\
+US buyback & $\phantom{-}2.260\!\times\!10^{-4}$ & \textsuperscript{} & $\phantom{-}1.042\!\times\!10^{-3}$ & $\phantom{-}0.22$ & $0.828$ & $-1.817\!\times\!10^{-3}$ & $\phantom{-}2.269\!\times\!10^{-3}$ \\
+VIX & $-5.606\!\times\!10^{-3}$ & \textsuperscript{*} & $\phantom{-}3.141\!\times\!10^{-3}$ & $-1.79$ & $0.074$ & $-1.176\!\times\!10^{-2}$ & $\phantom{-}5.494\!\times\!10^{-4}$ \\
+Treasury swap & $-5.956\!\times\!10^{-3}$ & \textsuperscript{} & $\phantom{-}9.701\!\times\!10^{-3}$ & $-0.61$ & $0.539$ & $-2.497\!\times\!10^{-2}$ & $\phantom{-}1.306\!\times\!10^{-2}$ \\
+US release & $\phantom{-}5.423\!\times\!10^{-2}$ & \textsuperscript{} & $\phantom{-}5.122\!\times\!10^{-2}$ & $\phantom{-}1.06$ & $0.290$ & $-4.617\!\times\!10^{-2}$ & $\phantom{-}1.546\!\times\!10^{-1}$ \\
+\addlinespace[0.3em]
+Constant & $\phantom{-}6.636\!\times\!10^{-2}$ & \textsuperscript{} & $\phantom{-}5.175\!\times\!10^{-2}$ & $\phantom{-}1.28$ & $0.200$ & $-3.508\!\times\!10^{-2}$ & $\phantom{-}1.678\!\times\!10^{-1}$ \\
+\hline
+\end{tabular}
+\\[0.2em]
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+\vspace{0.9em}
+
+\noindent\textbf{Residual diagnostics}\\[0.3em]
+\begin{tabular}{@{}l|rr l@{}}
+\hline
+Test & Statistic & $p$-value & Null hypothesis \\
+\hline
+Breusch--Pagan LM (heteroskedasticity) & $\phantom{-}213.271$ & $<\!0.001$ & homoskedastic residuals \\
+White LM (heteroskedasticity) & $\phantom{-}413.331$ & $<\!0.001$ & homoskedastic residuals \\
+Breusch--Godfrey LM (10 lags; autocorrelation) & $\phantom{-}25.920$ & $0.004$ & no serial correlation \\
+Ljung--Box Q (10 lags; autocorrelation) & $\phantom{-}26.100$ & $0.004$ & no serial correlation \\
+Jarque--Bera (normality) & $\phantom{-}243.077$ & $<\!0.001$ & normal residuals \\
+Durbin--Watson & $\phantom{-}2.099$ &  & DW $\approx 2$: no first-order autocorrelation \\
+\hline
+\end{tabular}
+\end{document}

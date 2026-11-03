@@ -1,0 +1,37 @@
+\documentclass[10pt]{article}
+\usepackage[landscape,margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{document}
+\begin{center}\large\textbf{H1: anticipation (pre-event appreciation)}\end{center}
+\noindent\textbf{Level change in e (USD per NZD)}\\[0.3em]
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}
+\hline
+Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+pre-event joint zero &  &  &  & $\phantom{-}14.418$ $\chi^2(5)$ & any $\neq 0$ & $0.013$\textsuperscript{**} &  &  \\
+cumulative pre-event appreciation & $\phantom{-}4.368\!\times\!10^{-6}$ &  & $\phantom{-}3.144\!\times\!10^{-6}$ & $\phantom{-}1.390$ $z$ & $>0$ & $0.082$\textsuperscript{*} & $-1.793\!\times\!10^{-6}$ & $\phantom{-}1.053\!\times\!10^{-5}$ \\
+\hline
+\end{tabular}
+\vspace{1em}
+
+\noindent\textbf{100 x log change in e (USD per NZD)}\\[0.3em]
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.9in}|r@{}l rrcr rr@{}}
+\hline
+Test & \multicolumn{2}{c}{Estimate} & HAC Std. Err. & Statistic & $H_a$ & $p$-value & \multicolumn{2}{c}{[95\% Conf. Interval]} \\
+\hline
+pre-event joint zero &  &  &  & $\phantom{-}13.580$ $\chi^2(5)$ & any $\neq 0$ & $0.019$\textsuperscript{**} &  &  \\
+cumulative pre-event appreciation & $\phantom{-}6.524\!\times\!10^{-4}$ &  & $\phantom{-}4.582\!\times\!10^{-4}$ & $\phantom{-}1.424$ $z$ & $>0$ & $0.077$\textsuperscript{*} & $-2.458\!\times\!10^{-4}$ & $\phantom{-}1.551\!\times\!10^{-3}$ \\
+\hline
+\end{tabular}
+\vspace{1em}
+
+{\footnotesize $^{*}\,p<0.10,\;^{**}\,p<0.05,\;^{***}\,p<0.01$ (two-sided where applicable).}
+{\footnotesize\\ Joint tests use a robust Wald $\chi^2$; contrasts use a normal $z$ test (one-sided where $H_a$ is $>0$ or $<0$). Estimates are sums of coefficients; confidence intervals are two-sided 95\%.}
+\end{document}
