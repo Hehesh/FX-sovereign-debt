@@ -9,3 +9,6 @@
 .Rproj.user/
 /data/raw/
 /data/processed/
+
+mx_bond_flows/raw/
+mx_bond_flows/regression/
