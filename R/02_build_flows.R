@@ -1,16 +1,26 @@
 # 02_build_flows.R - daily Mbono cash-flow calendar (MXN millions) with the foreign share bond by bond.
 # Inputs (placed by hand in mx_bond_flows/raw/, see README):
-#   mx_bond_terms.csv      one row per Mbono series: series, isin, issue_date, maturity, coupon_pct
-#   mx_issue_holdings.csv  weekly (Thursday) issue-by-issue sectorized report, long format:
-#                          date, series, outstanding, foreign  (MXN millions, nominal)
+#   mx_issue_holdings.csv  built by 01b_merge_banxico.R: date, series (M_YYYYMMDD), maturity, outstanding, foreign
+#   mx_bond_terms.csv      one row per Mbono: maturity (dd/mm/yyyy or yyyy-mm-dd), coupon_pct.
+#                          issue_date is optional; if missing, the first week the series appears is used.
 #   banxico_CA175.xlsx     daily foreign holdings by instrument (aggregate fallback)
 #   banxico_CA134.xlsx     daily Bonos outstanding (aggregate fallback)
 source("R/00_config.R")
 
-terms <- read_csv(file.path(RAW, "mx_bond_terms.csv"), show_col_types = FALSE) %>%
-  mutate(issue_date = as.Date(issue_date), maturity = as.Date(maturity))
 hold  <- read_csv(file.path(RAW, "mx_issue_holdings.csv"), show_col_types = FALSE) %>%
-  mutate(date = as.Date(date)) %>% arrange(series, date)
+  mutate(date = as.Date(date), maturity = as.Date(maturity)) %>% arrange(series, date)
+terms <- read_csv(file.path(RAW, "mx_bond_terms.csv"), show_col_types = FALSE) %>%
+  mutate(maturity = parse_date_time(as.character(maturity), c("dmy", "ymd")) %>% as.Date()) %>%
+  inner_join(hold %>% group_by(series, maturity) %>% summarise(first_seen = min(date), .groups = "drop"),
+             by = "maturity") %>%
+  mutate(issue_date = if ("issue_date" %in% names(.)) coalesce(as.Date(issue_date), first_seen) else first_seen)
+missing_terms <- setdiff(unique(hold$series), terms$series)
+if (length(missing_terms)) warning("no row in mx_bond_terms.csv for: ", paste(missing_terms, collapse = ", "))
+if (any(is.na(terms$coupon_pct))) {
+  warning(sum(is.na(terms$coupon_pct)), " bonds have no coupon yet; coupon flows for them are set to zero. ",
+          "Principal and issuance are unaffected.")
+  terms <- terms %>% mutate(coupon_pct = coalesce(coupon_pct, 0))
+}
 
 # 1. Coupons: Mbonos pay every 182 days counted back from maturity, face 100, coupon = rate/100*182/360*100
 coupons <- terms %>% rowwise() %>% do({
@@ -26,10 +36,10 @@ coupons <- terms %>% rowwise() %>% do({
 chg <- hold %>% group_by(series) %>%
   mutate(d_out = outstanding - lag(outstanding), share = foreign / outstanding) %>% ungroup()
 issuance <- chg %>% filter(d_out > 0) %>% transmute(series, date, type = "issuance", amount = d_out)
-buyback  <- chg %>% inner_join(terms %>% select(series, maturity), by = "series") %>%
-  filter(d_out < 0, date < maturity - 7) %>% transmute(series, date, type = "buyback", amount = -d_out)
-principal <- hold %>% inner_join(terms %>% select(series, maturity), by = "series") %>%
-  filter(date <= maturity) %>% group_by(series) %>% slice_max(date, n = 1) %>% ungroup() %>%
+buyback  <- chg %>% filter(d_out < 0, date < maturity - 7) %>%
+  transmute(series, date, type = "buyback", amount = -d_out)
+principal <- hold %>% filter(date <= maturity, maturity <= max(hold$date)) %>%
+  group_by(series) %>% slice_max(date, n = 1) %>% ungroup() %>%
   transmute(series, date = maturity, type = "principal", amount = outstanding)
 coupon_amt <- coupons %>% inner_join(hold %>% select(series, date_h = date, outstanding), by = "series",
                                      relationship = "many-to-many") %>%

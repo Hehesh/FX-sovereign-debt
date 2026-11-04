@@ -3,6 +3,7 @@
 Run from the repo root with the .Rproj open there, in order:
 
     source("R/01_fetch_data.R")      # FRED pulls; Banxico FIX if BANXICO_TOKEN is set
+    source("R/01b_merge_banxico.R")  # merge the weekly Banxico exports -> mx_issue_holdings.csv
     source("R/02_build_flows.R")     # Mbono cash-flow calendar with bond-level foreign share
     source("R/03_build_panel.R")     # fixing windows, outcome, controls
     source("R/04_run_regressions.R") # A1r primary + sensitivities, pooled principal, placebo
@@ -14,8 +15,8 @@ Raw and regression CSVs stay local (add `mx_bond_flows/raw/` and `mx_bond_flows/
 
 | File | Source | What it is |
 |---|---|---|
-| `mx_issue_holdings.csv` | Banxico > Valores en poder del publico > Tenencia sectorizada emision por emision > Reportes historicos (weekly Thursdays since 1999, XLS per date range) | Long format: `date, series, outstanding, foreign` in MXN millions nominal. Keep Bonos (M) rows only. This is the bond-level foreign share AND the source of issuance/buyback amounts. |
-| `mx_bond_terms.csv` | Same report (each series shows maturity and coupon) or Banxico "Caracteristicas de los valores" | `series, isin, issue_date, maturity, coupon_pct` for every Mbono series. |
+| `banxico_weekly/*.xls` | https://www.banxico.org.mx/valores/consultasHistoricasSectorizadas.jsp?BMXC_claseIns=GUB&BMXC_lang=es_MX , Instrument = ALL, six months per query | Weekly (Thursday) holdings by sector for every security. `01b_merge_banxico.R` merges them into `mx_issue_holdings.csv` and keeps the Mbono (code M) rows: foreign holdings and outstanding per bond, MXN millions. |
+| `mx_bond_terms.csv` | Banxico/SHCP bond characteristics, or the Valmer vector | Two columns: `maturity, coupon_pct`, one row per Mbono. The maturity is the key that links to the weekly file. |
 | `banxico_FIX.csv` | SIE series SF43718 via API (01_fetch_data.R) or export from SIE | `date, value` MXN per USD, noon Mexico City. |
 | `mx_2y_rate.csv` | Banxico SIE "Vector de precios" / Valmer 2y Mbono yield, or 2y TIIE swap | `date, value` in %. Policy control (MX leg of dPol). |
 | `banxico_CA175.xlsx`, `banxico_CA134.xlsx` | SIE cuadros CA175 and CA134, Exportar > XLS, period Todo | Daily aggregate foreign holdings and outstanding, by instrument. Fallback share and a check on the weekly bond-level data. |

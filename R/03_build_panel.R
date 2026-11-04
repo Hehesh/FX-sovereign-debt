@@ -6,6 +6,10 @@ source("R/00_config.R")
 
 fixings <- function(source = c("fix", "h10")) {
   source <- match.arg(source)
+  if (source == "fix" && !file.exists(file.path(RAW, "banxico_FIX.csv"))) {
+    message("banxico_FIX.csv not found; using FRED H.10 (noon New York) as the fixing instead")
+    source <- "h10"
+  }
   if (source == "fix") {
     f <- read_csv(file.path(RAW, "banxico_FIX.csv"), show_col_types = FALSE) %>%
       transmute(date = as.Date(date), e = 1 / value) %>% filter(!is.na(e))      # USD per MXN
@@ -18,12 +22,17 @@ fixings <- function(source = c("fix", "h10")) {
 
 controls <- function(fix_utc) {
   vix <- read_fred_csv("VIXCLS"); ust2 <- read_fred_csv("DGS2"); brent <- read_fred_csv("DCOILBRENTEU")
-  mx2 <- read_csv(file.path(RAW, "mx_2y_rate.csv"), show_col_types = FALSE) %>%
-    mutate(date = as.Date(date))                                   # Mexican 2y yield, % (see README)
+  mx2_file <- file.path(RAW, "mx_2y_rate.csv")
+  mx2 <- if (file.exists(mx2_file)) read_csv(mx2_file, show_col_types = FALSE) %>% mutate(date = as.Date(date)) else {
+    message("mx_2y_rate.csv not found; dPol uses the US 2y change only until it is added")
+    tibble(date = as.Date(character()), value = numeric())
+  }
   chg <- function(d, tz, h, m = 0) window_changes(d$value, stamp(d$date, tz, h, m), fix_utc)
   tibble(
     dlnVIX = 100 * chg(mutate(vix, value = log(value)), TZ_NY, 16, 15),
-    dPol   = chg(mx2, TZ_MX, 23, 59) - chg(ust2, TZ_NY, 16),      # MX-US 2y differential change
+    dPol   = (if (nrow(mx2)) chg(mx2, TZ_MX, 23, 59) else 0) - chg(ust2, TZ_NY, 16),  # MX-US 2y differential change (NA before the MX series starts)
+    dTIIE  = if (file.exists(file.path(RAW, "mx_tiie28.csv")))
+               chg(read_csv(file.path(RAW, "mx_tiie28.csv"), show_col_types = FALSE) %>% mutate(date = as.Date(date)), TZ_MX, 23, 59) else NA_real_,
     rBrent = 100 * chg(mutate(brent, value = log(ifelse(value > 0, value, NA))), TZ_LON, 23, 59),
     dUST2  = chg(ust2, TZ_NY, 16),
     dT10Y2Y = chg(read_fred_csv("T10Y2Y"), TZ_NY, 16),
@@ -56,6 +65,6 @@ window_frame <- function(source = "fix", shift_controls = FALSE) {
 
 if (!isTRUE(getOption("mx.no_main"))) {
   w <- window_frame("fix")
-  write_csv(w, file.path(REG, "mx_panel_fix.csv"))
+  write_csv(w, file.path(REG, "mx_panel.csv"))
   cat("panel:", nrow(w), "windows;", sum(w$P0 > 0), "principal windows;", sum(w$I0 > 0), "issuance windows\n")
 }

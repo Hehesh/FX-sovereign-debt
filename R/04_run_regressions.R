@@ -41,8 +41,11 @@ pooled_frame <- function(w) {
 
 main <- function() {
   w  <- window_frame("fix")
+  FULL <- c("N0", "N1", "dlnVIX", "dUST2", "rBrent")          # full 2010-2026 sample, US 2y as the rate control
   res <- bind_rows(
-    tidy_fit(fit_hac(w, PRIMARY), "primary_fix"),
+    tidy_fit(fit_hac(w, FULL), "primary_full_sample"),
+    tidy_fit(fit_hac(w, PRIMARY), "mx_us_2y_diff_2015on"),
+    tidy_fit(fit_hac(w, c("N0", "N1", "dlnVIX", "dTIIE", "dUST2", "rBrent")), "tiie28_full_sample"),
     tidy_fit(fit_hac(w, PRIMARY, 5), "hac5"),
     tidy_fit(fit_hac(w, PRIMARY, 20), "hac20"),
     tidy_fit(fit_hac(w, c("N0", "N1", "dlnVIX", "dPol", "dBroadUSD")), "sub_broadUSD_for_Brent"),
@@ -52,15 +55,16 @@ main <- function() {
   write_csv(res, file.path(OUT, "mx_a1r_coefficients.csv"))
 
   pw <- pooled_frame(w)
-  pf <- fit_hac(pw, c("P_pre", "P_evt", "P_post", "dlnVIX", "dPol", "rBrent"))
+  pf <- fit_hac(pw, c("P_pre", "P_evt", "P_post", "dlnVIX", "dUST2", "rBrent"))
   write_csv(tibble(term = rownames(pf$ct), coef = pf$ct[, 1], hac_se = pf$ct[, 2], p = pf$ct[, 4], n = pf$n),
             file.path(OUT, "mx_pooled_principal.csv"))
 
-  pl <- placebo(w); actual <- contrast(fit_hac(w, PRIMARY), list(N0 = 1, N1 = 1))
-  summ <- tibble(actual = actual$estimate, hac_se = actual$se, hac_p = actual$p,
-                 placebo_sd = sd(pl$estimate), placebo_p = mean(abs(pl$estimate) >= abs(actual$estimate)),
+  pl <- placebo(w, FULL); act <- contrast(fit_hac(w, FULL), list(N0 = 1, N1 = 1))
+  summ <- tibble(b0_plus_b1 = act$estimate, hac_se = act$se, hac_p = act$p,
+                 placebo_sd = sd(pl$estimate), placebo_p = mean(abs(pl$estimate) >= abs(act$estimate)),
                  n_principal = sum(w$P0 > 0), n_issuance = sum(w$I0 > 0), n_windows = nrow(w))
   write_csv(pl, file.path(OUT, "mx_placebo.csv")); write_csv(summ, file.path(OUT, "mx_summary.csv"))
-  print(res %>% filter(spec == "primary_fix")); print(summ)
+  print(res %>% filter(spec %in% c("primary_full_sample", "mx_us_2y_diff_2015on")), n = 30); print(summ)
+  print(tibble(term = rownames(pf$ct), coef = pf$ct[, 1], hac_se = pf$ct[, 2], p = pf$ct[, 4]))
 }
 main()
