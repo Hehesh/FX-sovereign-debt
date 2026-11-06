@@ -4,11 +4,17 @@
 # assigned to the window (last fixing before settlement, first fixing after).
 source("R/00_config.R")
 
-fixings <- function(source = c("fix", "h10")) {
+fixings <- function(source = c("fix", "h10", "h10_eur")) {
   source <- match.arg(source)
   if (source == "fix" && !file.exists(file.path(RAW, "banxico_FIX.csv"))) {
-    message("banxico_FIX.csv not found; using FRED H.10 (noon New York) as the fixing instead")
+    # a warning, not a message: earlier "fix" results were silently H.10 because this file was missing
+    warning("banxico_FIX.csv not found; using FRED H.10 (noon New York) instead. Results labelled FIX are H.10.")
     source <- "h10"
+  }
+  if (source == "h10_eur") {   # EUR per MXN = 1 / (MXN per USD * USD per EUR); positive r = peso appreciation
+    f <- inner_join(read_fred_csv("DEXMXUS"), read_fred_csv("DEXUSEU"), by = "date") %>%
+      transmute(date, e = 1 / (value.x * value.y))
+    return(list(e = f, utc = stamp(f$date, TZ_NY, 12)))
   }
   if (source == "fix") {
     f <- read_csv(file.path(RAW, "banxico_FIX.csv"), show_col_types = FALSE) %>%

@@ -43,3 +43,11 @@ Brent 23:59 London, MX 2y 23:59 Mexico City). `controls_pre_window` lags everyth
 
 `mx_a1r_coefficients.csv`, `mx_pooled_principal.csv`, `mx_placebo.csv`, `mx_summary.csv`
 (summary has the event counts: if `n_principal` is under ~25, say so on the slide before anything else).
+
+## Robustness (R/06_robustness.R)
+
+    source("R/06_robustness.R")   # FIX, EUR/MXN, drop largest maturities, dollar/EM controls; 1000 placebo draws each
+
+Writes `output/mx_robustness.csv` and `output/mx_robustness.png`. Needs `raw/banxico_FIX.csv` (Banxico historical FIX,
+`banxico.org.mx/tipcamb/tipCamIHAction.do`, column "Determinación") and `raw/DEXUSEU_fred.csv`. A missing FIX file now
+warns: earlier "fix" results were FRED H.10. Holder countries: `output/imf_pip_mexico_lt_debt_by_holder.csv` (IMF PIP).

@@ -67,4 +67,4 @@ main <- function() {
   print(res %>% filter(spec %in% c("primary_full_sample", "mx_us_2y_diff_2015on")), n = 30); print(summ)
   print(tibble(term = rownames(pf$ct), coef = pf$ct[, 1], hac_se = pf$ct[, 2], p = pf$ct[, 4]))
 }
-main()
+if (!isTRUE(getOption("mx.lib_only"))) main()   # options(mx.lib_only = TRUE) to source the helpers only
